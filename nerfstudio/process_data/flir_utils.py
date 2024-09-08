@@ -76,8 +76,12 @@ class FlirImageExtractor:
         meta_json = subprocess.check_output(
             [self.exiftool_path, '-RawThermalImageType', '-j', self.flir_img_filename])
         meta = json.loads(meta_json.decode())[0]
-
-        return meta['RawThermalImageType']
+        if 'RawThermalImageType' in meta:
+            return meta['RawThermalImageType']
+        else:
+            print(f"Metadata key 'RawThermalImageType' not found for image: {img_path}")
+        return None
+       #return meta['RawThermalImageType']
 
     def get_rgb_np(self):
         """
